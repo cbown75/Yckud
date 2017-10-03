@@ -1,10 +1,17 @@
 ﻿function ScheduleScript()
 {
-    $repeat = (New-TimeSpan -Minutes 7)
-    $jobname = "DonWebster"
-    $script =  "D:\Downloads\DuckyPaper\duckypaper.ps1"
+    $repeat=(New-TimeSpan -Minutes 2)
+    $jobname="DonWebster"
+    $script="D:\Git\Yckud\DuckyPaper\duckypaper.ps1"
 
-    Unregister-ScheduledTask -TaskName $jobname -Confirm:$false
+    try
+    {
+    Unregister-ScheduledJob -Name $jobname -Force
+    }
+    catch
+    {
+        Write-Host "Job not found"
+    }
 
     $scriptblock = [scriptblock]::Create($script)
 
@@ -13,7 +20,8 @@
     $action = New-ScheduledTaskAction -Execute 'Powershell.exe' 
     $trigger = New-JobTrigger -Once -At (Get-Date).Date -RepeatIndefinitely -RepetitionInterval $repeat
     $options = New-ScheduledJobOption -RunElevated -ContinueIfGoingOnBattery -StartIfOnBattery
-    Register-ScheduledJob -Name $jobname -ScriptBlock $scriptblock -Trigger $trigger -ScheduledJobOption $options
+    #Register-ScheduledJob -Name $jobname -ScriptBlock $scriptblock -Trigger $trigger -ScheduledJobOption $options -RunNow -RunEvery $repeat
+    Register-ScheduledJob -Name $jobname -FilePath $script -Trigger $trigger -ScheduledJobOption $options -RunNow -RunEvery $repeat
 }
 
 ScheduleScript
