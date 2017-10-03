@@ -1,6 +1,6 @@
 ﻿function ScheduleScript()
 {
-    $repeat = (New-TimeSpan -Minutes 15)
+    $repeat = (New-TimeSpan -Minutes 7)
     $jobname = "DonWebster"
     $script =  "D:\Downloads\DuckyPaper\duckypaper.ps1"
 
